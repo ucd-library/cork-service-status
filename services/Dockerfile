@@ -13,7 +13,7 @@ RUN mkdir /services
 WORKDIR /services
 
 COPY services/package.json .
-#COPY services/package-lock.json .
+COPY services/package-lock.json .
 RUN npm install
 
 CMD ["bash", "-c", "tail -f /dev/null"]

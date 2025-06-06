@@ -1,0 +1,25 @@
+x-variables:
+  main-image: &main-image localhost/local-dev/cork-service-status-base:local-dev
+services:
+  app:
+    image: *main-image
+    env_file:
+      - .env
+    ports:
+      - ${APP_HOST_PORT:-3000}:${APP_CONTAINER_PORT:-3000}
+    volumes:
+      - ../../../services/package.json:/services/package.json
+      - ../../../services/package-lock.json:/services/package-lock.json
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: localhost
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ../../../services/pg/schema:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - ${ADMINER_HOST_PORT:-8080}:8080
+volumes:
+  db-data:
