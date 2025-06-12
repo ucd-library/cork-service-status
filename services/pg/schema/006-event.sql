@@ -1,4 +1,4 @@
-set search_path to cork_status, public;
+set search_path to cork_status, api, public;
 
 DO $$ BEGIN
   CREATE TYPE cork_status.event_type AS ENUM (

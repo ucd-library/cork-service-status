@@ -1,4 +1,4 @@
-set search_path to cork_status, public;
+set search_path to cork_status, api, public;
 
 CREATE TABLE IF NOT EXISTS cork_status.service (
   service_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

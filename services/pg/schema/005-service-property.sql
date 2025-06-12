@@ -1,4 +1,4 @@
-set search_path to cork_status, public;
+set search_path to cork_status, api, public;
 
 CREATE TABLE IF NOT EXISTS cork_status.service_property (
   service_property_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -44,12 +44,18 @@ CREATE OR REPLACE FUNCTION cork_status.ensure_service_property(name_in text)
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE TABLE IF NOT EXISTS cork_status.service_property_role (
+  service_property_id UUID REFERENCES cork_status.service_property(service_property_id) ON DELETE CASCADE,
+  role_id UUID REFERENCES cork_status.role(role_id) ON DELETE CASCADE,
+  PRIMARY KEY (service_property_id, role_id)
+);
+
 CREATE TABLE IF NOT EXISTS cork_status.service_property_value (
+  service_property_value_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   service_id UUID REFERENCES cork_status.service(service_id) ON DELETE CASCADE,
   service_property_id UUID REFERENCES cork_status.service_property(service_property_id) ON DELETE CASCADE,
   value text NOT NULL,
-  role_id UUID REFERENCES cork_status.role(role_id) ON DELETE SET NULL,
-  PRIMARY KEY (service_id, service_property_id)
+  service_property_value_order integer NOT NULL DEFAULT 0
 );
 
 

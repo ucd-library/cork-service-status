@@ -1,5 +1,6 @@
 CREATE schema IF NOT EXISTS cork_status;
-set search_path to cork_status, public;
+CREATE schema IF NOT EXISTS api;
+set search_path to cork_status, api, public;
 
 create or replace function public.try_cast_uuid(p_in text)
    returns UUID
