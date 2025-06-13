@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS cork_status.service_property (
   name text NOT NULL UNIQUE,
   title text NOT NULL UNIQUE,
   description text,
-  type text NOT NULL DEFAULT 'string' CHECK (type IN ('string', 'number', 'boolean', 'object', 'array')),
+  type text NOT NULL DEFAULT 'string' CHECK (type IN ('string', 'number', 'boolean', 'object', 'array', 'markdown', 'date')),
   created_at timestamp NOT NULL DEFAULT now(),
   updated_at timestamp NOT NULL DEFAULT now(),
   created_by UUID REFERENCES cork_status.user(user_id) ON DELETE SET NULL,
@@ -57,6 +57,18 @@ CREATE TABLE IF NOT EXISTS cork_status.service_property_value (
   value text NOT NULL,
   service_property_value_order integer NOT NULL DEFAULT 0
 );
+
+INSERT INTO cork_status.service_property (name, title, description, type)
+VALUES
+  ('is_dev', 'Development Service', 'Service is for development purposes only', 'boolean'),
+  ('url', 'Service URL', 'Primary URL for the service', 'string'),
+  ('admin_url', 'Service Admin URL', 'URL for service administration', 'string'),
+  ('technical_lead', 'Technical Lead', 'Responsible for service health and restarts', 'string'),
+  ('technical_lead_backup', 'Backup Technical lead', 'For when the technical lead is unavailable', 'string'),
+  ('support_url', 'Support URL', 'URL for service support resources', 'string'),
+  ('health_dashboard', 'Health Dashboard', 'URL for the Google Cloud health dashboard', 'string'),
+  ('restart_instructions', 'Restart Instructions', 'Instructions for restarting the service', 'markdown')
+ON CONFLICT (name) DO NOTHING;
 
 
 
