@@ -111,11 +111,20 @@ class Services{
           VALUES ($1, $2, $3, $4)
           RETURNING *
           `;
-          const val = Array.isArray(sp.value) ? JSON.stringify(sp.value) : sp.value;
 
-          const serviceValuesParams = [serviceId, servicePropertyId ,val, sp.valueOrder ?? 0]//[employeeId, g.id];
-          const sp_r = await client.query(serviceValuesText, serviceValuesParams);
-          resRecord.properties.push(sp_r.rows[0]);
+          const sp_r = [];
+          const val = !Array.isArray(sp.value) ? [sp.value] : sp.value;
+
+
+          // make sure all is individual
+          for(const singleSP of val){
+            const serviceValuesParams = [serviceId, servicePropertyId ,singleSP, sp.valueOrder ?? 0]//[employeeId, g.id];
+            const sp_value = await client.query(serviceValuesText, serviceValuesParams);
+            sp_r.push(sp_value.rows[0])
+          }
+
+ 
+          resRecord.properties.push(sp_r);
 
 
           if(sp.role && sp.role == "public") {
@@ -129,7 +138,8 @@ class Services{
 
             const servicePropertiesRoleParams = [servicePropertyId, serviceRoleId]//[employeeId, g.id];
             const sprole_r = await client.query(servicePropertiesRoleText, servicePropertiesRoleParams);
-            resRecord.propertyRoles.push(sprole_r.rows[0]);
+
+            resRecord.propertyRoles.push(sprole_r.rows);
 
           }
 

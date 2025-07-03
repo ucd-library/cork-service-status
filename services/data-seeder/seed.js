@@ -18,15 +18,14 @@ program
     console.log(`Services Created: ${services}`);
 
     //Create fake data
-    // const generator = new PGSampleData();  
-    // const data = generator.createSampleData(services);
+    const generator = new PGSampleData();  
+    const data = generator.createSampleData(services);
 
     //Call create method
-    // const result = await Services.create(data);
+    const result = await Services.create(data);
+    console.log("Results:\n");
+    console.dir(result.res, { depth: null, maxArrayLength: null });
 
-    // console.log("Results:", result);
-
-    await Services.exampleQuery();
 
 
   });
