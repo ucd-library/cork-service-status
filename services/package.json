@@ -18,10 +18,14 @@
   "dependencies": {
     "@ucd-lib/logger": "^0.0.6",
     "@ucd-lib/spa-router-middleware": "^0.2.3",
+    "commander": "^14.0.0",
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@ucd-lib/cork-app-build": "^0.5.0",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
