@@ -4,10 +4,8 @@ import { Command } from 'commander';
 import PGSampleData from './lib/faker.js';
 import Services from '../lib/services.js'
 
-// Create a new Command instance
 const program = new Command();
 
-// Set metadata
 program
   .name('seed')
   .description('A data seed generator for cork status')
@@ -30,5 +28,4 @@ program
 
   });
 
-// Parse CLI arguments
 program.parse(process.argv);

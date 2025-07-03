@@ -38,14 +38,6 @@ class Services{
         'name', 'title', 'tags', 'createdBy', 'updatedBy'];
       const values = [];
 
-      // for (const prop of props) {
-      //   if ( service.hasOwnProperty(prop) ){
-      //     text += `, ${TextUtils.underscore(prop)}`;
-      //     values.push(service[prop]);
-      //   }
-      // }
-
-
       let first = true;
       for (const prop of props) {
         if ( service.hasOwnProperty(prop) ){
@@ -381,14 +373,12 @@ class Services{
     const client = await pg.getClient();
 
     try {
-      // Call the Postgres function with a parameter
       const result = await client.query(
         'SELECT cork_status.get_service_property_id($1) AS service_property_id',
         [nameOrId]
       );
       return await result.rows[0].service_property_id;
     } catch (err) {
-      // Handle exceptions raised in PL/pgSQL
       return {error: true, err: err}
     } finally {
       client.release();
@@ -406,16 +396,13 @@ class Services{
       const client = await pg.getClient();
 
       try {
-        // Call the Postgres function with a parameter
         const result = await client.query(
           'SELECT cork_status.get_service_id($1) AS service_id',
           [nameOrId]
         );
     
-        // Print the returned UUID
         return await result.rows[0].service_id;
       } catch (err) {
-        // Handle exceptions raised in PL/pgSQL
         return {error: true, err: err}
       } finally {
         client.release();
@@ -434,16 +421,13 @@ class Services{
     const client = await pg.getClient();
 
     try {
-        // Call the Postgres function with a parameter
         const result = await client.query(
           'SELECT cork_status.get_user_id($1) AS get_user_id',
           [nameIn]
         );
     
-        // Print the returned UUID
         return await result.rows[0].get_user_id;
       } catch (err) {
-        // Handle exceptions raised in PL/pgSQL
         return {error: true, err: err}
       } finally {
         client.release();
@@ -462,16 +446,13 @@ class Services{
     const client = await pg.pool.connect();
 
     try {
-        // Call the Postgres function with a parameter
         const result = await client.query(
           'SELECT cork_status.ensure_user($1) AS ensure_user',
           [username_in]
         );
     
-        // Print the returned UUID
         return await result.rows[0].ensure_user
       } catch (err) {
-        // Handle exceptions raised in PL/pgSQL
         return {error: true, err: err}
       } finally {
         client.release();
@@ -491,16 +472,13 @@ class Services{
     const client = await pg.getClient();
 
     try {
-        // Call the Postgres function with a parameter
         const result = await client.query(
           'SELECT cork_status.ensure_service_property($1) AS ensure_property_id',
           [name_in]
         );
     
-        // Print the returned UUID
         // console.log(result.rows[0].ensure_property_id);
       } catch (err) {
-        // Handle exceptions raised in PL/pgSQL
         return {error: true, err: err}
       } finally {
         client.release();
@@ -519,16 +497,13 @@ class Services{
     const client = await pg.getClient();
 
     try {
-        // Call the Postgres function with a parameter
         const result = await client.query(
           'SELECT cork_status.get_role_id($1) AS role_id',
           [nameOrId]
         );
     
-        // Print the returned UUID
         return await result.rows[0].role_id;
       } catch (err) {
-        // Handle exceptions raised in PL/pgSQL
         return {error: true, err: err}
       } finally {
         client.release();
