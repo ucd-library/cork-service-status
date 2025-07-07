@@ -7,11 +7,9 @@ In progress
 ## Status Fake Data Seeding
 
 ### Deploy Data Seeding
-1. Run a docker build in folder with Dockerfile: `docker build -t localhost/local-dev/cork-service-status-base:local-dev .`
+1. Run `./cmds/build-local-dev` to build Dockerfile 
 2. Go to `/deploy/compose/cork-service-status-local-dev` folder
-3. You can start up the docker compose app container to run: `docker compose up app`
-	* make sure your `db` container is started up to use: `docker compose up db`
-	* you can also start adminer container if you want visual
+3. You can start up the docker compose app container to run detatched: `docker compose up -d`
 
 #### Inside Container
 In the `/deploy/compose/cork-service-status-local-dev` folder

@@ -13,7 +13,45 @@ class PGSampleData {
             creator_lastName: 'Schroeder',
             username: 'Lora.Will'
             },
-            serviceProperties: [ [Object], [Object], [Object], [Object] ]
+            serviceProperties: [
+              {
+                name: 'support_url',
+                valueOrder: 0,
+                value: [ 'https://cautious-thorn.com' ]
+              },
+              {
+                name: 'technical_lead_backup',
+                valueOrder: 1,
+                value: [
+                  'https://trained-meadow.com',
+                  'https://zealous-suv.org',
+                  'https://peaceful-tomb.com',
+                  'https://imaginary-cake.biz/',
+                  'https://torn-vestment.com/'
+                ],
+                role: 'public'
+              },
+              {
+                name: 'restart_instructions',
+                valueOrder: 2,
+                value: '- `parse system`: Try to hack the RAM alarm, maybe it will connect the mobile transmitter!\n' +
+                  "- `generate matrix`: You can't calculate the pixel without indexing the bluetooth EXE capacitor!\n" +
+                  "- `generate transmitter`: transmitting the program won't do anything, we need to connect the redundant TCP matrix!\n" +
+                  '- `reboot panel`: The HEX matrix is down, hack the online pixel so we can quantify the CLI array!',
+                role: 'public'
+              },
+              {
+                name: 'admin_url',
+                valueOrder: 3,
+                value: [
+                  'https://empty-best-seller.info/',
+                  'https://joyful-molasses.net/',
+                  'https://posh-heating.info',
+                  'https://front-tomb.info'
+                ],
+                role: 'public'
+              }
+            ]
         },
         {
             name: 'making',
@@ -25,7 +63,25 @@ class PGSampleData {
             username: 'Lacey77'
             },
             role: 'public',
-            serviceProperties: [ [Object], [Object], [Object] ]
+            serviceProperties: [
+              {
+                name: 'technical_lead_backup',
+                valueOrder: 0,
+                value: [ 'https://crushing-understanding.org' ]
+              },
+              {
+                name: 'health_dashboard',
+                valueOrder: 1,
+                value: [ 'https://heavy-flight.com', 'https://homely-contractor.net/' ],
+                role: 'public'
+              },
+              {
+                name: 'support_url',
+                valueOrder: 2,
+                value: [ 'https://repentant-cellar.biz/', 'https://last-cassava.name/' ],
+                role: 'public'
+              }
+            ]
         },
         {
             name: 'ice-cream',
@@ -36,9 +92,33 @@ class PGSampleData {
             creator_lastName: 'Willms',
             username: 'Eleonore47'
             },
-            serviceProperties: [ [Object], [Object], [Object], [Object], [Object] ]
+            serviceProperties: [
+                {
+                  name: 'url',
+                  valueOrder: 0,
+                  value: [
+                    'https://mediocre-sesame.com',
+                    'https://drab-partridge.net',
+                    'https://bright-object.org',
+                    'https://talkative-morning.info',
+                    'https://lumpy-interior.biz'
+                  ]
+                },
+                {
+                  name: 'health_dashboard',
+                  valueOrder: 1,
+                  value: [ 'https://tepid-abacus.name', 'https://busy-annual.net' ],
+                  role: 'public'
+                },
+                { name: 'is_dev', valueOrder: 2, value: true },
+                {
+                  name: 'technical_lead',
+                  valueOrder: 3,
+                  value: 'Frankie Cartwright-Gutkowski'
+                }
+            ]
         }
-        ]
+      ]
   */
 
   /**
@@ -54,7 +134,7 @@ class PGSampleData {
         const prop = { name, valueOrder: index };
 
         if (name === 'is_dev') {
-            prop.value = true;
+            prop.value = faker.datatype.boolean();
         } else if (name === 'support_url') {
             const supportUrlCount = faker.number.int({ min: 1, max: 5 });
             prop.value = Array.from({ length: supportUrlCount }, () => faker.internet.url());
