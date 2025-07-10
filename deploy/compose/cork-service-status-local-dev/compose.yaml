@@ -10,6 +10,9 @@ services:
     volumes:
       - ../../../services/package.json:/services/package.json
       - ../../../services/package-lock.json:/services/package-lock.json
+      - ../../../services/lib:/services/lib
+      - ../../../services/data-seeder:/services/data-seeder
+
   db:
     image: postgres:16
     environment:
