@@ -8,26 +8,23 @@
     "lib": "lib"
   },
   "scripts": {
-    "client": "node client/index.js",
-    "client-watch": "cd client && ./watch.sh",
-    "client-dist": "cd client && ./dist.sh",
-    "client-build": "cd client && ./build.sh"
+    "start-app": "node client/index.js"
   },
   "author": "spelkey@ucdavis.edu",
   "license": "MIT",
   "dependencies": {
+    "@ucd-lib/cork-app-build": "^0.5.0",
+    "@ucd-lib/cork-app-state": "^3.0.1",
+    "@ucd-lib/cork-app-utils": "^6.3.1",
     "@ucd-lib/logger": "^0.0.6",
     "@ucd-lib/spa-router-middleware": "^0.2.3",
     "commander": "^14.0.0",
-    "dotenv": "^17.0.1",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
+    "fs-extra": "^11.3.0",
     "node-fetch": "^3.3.2",
     "pg": "^8.16.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.8.0",
-    "@ucd-lib/cork-app-build": "^0.5.0",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "@faker-js/faker": "^9.8.0"
   }
 }

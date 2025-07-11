@@ -16,6 +16,7 @@ services:
     volumes:
       - ../../../services:/services
       - /services/node_modules
+      - /services/client/dev/node_modules
 
   db:
     image: postgres:16

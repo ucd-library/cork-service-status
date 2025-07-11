@@ -18,6 +18,12 @@ COPY services/package.json .
 COPY services/package-lock.json .
 COPY services/data-seeder ./data-seeder
 COPY services/lib ./lib
+COPY services/client ./client
+
+# client build
+RUN cd /services/client/dev && \
+  npm install && \
+  npm run build-dev
 
 RUN npm install
 

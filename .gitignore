@@ -5,3 +5,4 @@ service-account.json
 .vscode
 corkbuild.Dockerfile
 *.cork-build.json
+services/client/dev/public/js
