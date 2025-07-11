@@ -127,7 +127,6 @@ class PGSampleData {
    */
   createServiceProperties(){
     const propertyNames = ['is_dev', 'support_url', 'technical_lead', 'url', 'admin_url', 'technical_lead_backup', 'health_dashboard', 'restart_instructions'];
-
     const selectedNames = faker.helpers.arrayElements(propertyNames, { min: 3, max: 5 });
 
     return selectedNames.map((name, index) => {
@@ -182,12 +181,12 @@ class PGSampleData {
 
       return {
         name: faker.word.noun(),
-        title: faker.word.words({ min: 1, max: 3 }),
+        title: faker.word.words({ min: 1, max: 3 }).replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1)),
         tags: faker.helpers.arrayElements(['tag1', 'tag2', 'tag3', 'tag4', 'tag5'], { min: 1, max: 3 }),
         user: {
-            creator_firstName: faker.person.firstName(),
-            creator_lastName: faker.person.lastName(),
-            username: username,
+          creator_firstName: faker.person.firstName(),
+          creator_lastName: faker.person.lastName(),
+          username: username,
         },
         ...(faker.datatype.boolean() && { role: 'public' }),
         serviceProperties: this.createServiceProperties()

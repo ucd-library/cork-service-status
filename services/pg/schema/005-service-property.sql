@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS cork_status.service_property_value (
   service_property_value_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   service_id UUID REFERENCES cork_status.service(service_id) ON DELETE CASCADE,
   service_property_id UUID REFERENCES cork_status.service_property(service_property_id) ON DELETE CASCADE,
-  value text NOT NULL,
+  value jsonb NOT NULL,
   service_property_value_order integer NOT NULL DEFAULT 0
 );
 

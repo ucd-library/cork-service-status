@@ -16,7 +16,7 @@ class Services{
    * @description Inserts one or more services along with their related service properties and roles.
    * Each service must have a name, title, tags, and optionally serviceProperties and role.
    * Also associates users and role-based access where specified.
-   * 
+   *
    * @param {Array<Object>} data - An array of service objects.
    * @returns {Object} Result object with service insertions and errors if any.
    */
@@ -110,12 +110,12 @@ class Services{
 
           // make sure all is individual
           for(const singleSP of val){
-            const serviceValuesParams = [serviceId, servicePropertyId ,singleSP, sp.valueOrder ?? 0]//[employeeId, g.id];
+            const serviceValuesParams = [serviceId, servicePropertyId ,JSON.stringify(singleSP), sp.valueOrder ?? 0]//[employeeId, g.id];
             const sp_value = await client.query(serviceValuesText, serviceValuesParams);
             sp_r.push(sp_value.rows[0])
           }
 
- 
+
           resRecord.properties.push(sp_r);
 
 
@@ -153,14 +153,14 @@ class Services{
 
 
     return out;
-    
+
   }
 
   /**
    * @method updateService
    * @description Updates a service's name, title, or tags based on its ID or name.
    * Also updates the `updated_by` field with the current user.
-   * 
+   *
    * @param {String} nameorid - The service name or ID.
    * @param {Object} v - The update payload (name, title, tags, user).
    * @returns {Object} Result of the update query or error.
@@ -204,7 +204,7 @@ class Services{
   /**
    * @method updateServicePropertyValues
    * @description Updates the value or value order of a service property value.
-   * 
+   *
    * @param {String} nameorid - The property name or ID.
    * @param {Object} v - The update payload (value, valueOrder).
    * @returns {Object} Result of the update query or error.
@@ -244,7 +244,7 @@ class Services{
   /**
    * @method updateServiceProperty
    * @description Updates a service property definition (name, title, type, description).
-   * 
+   *
    * @param {String} nameorid - The service property name or ID.
    * @param {Object} v - The update payload with optional metadata fields.
    * @returns {Object} Result of the update query or error.
@@ -291,7 +291,7 @@ class Services{
   /**
    * @method updateRoles
    * @description Updates the name of a role in the system.
-   * 
+   *
    * @param {String} nameorid - The role name or ID.
    * @param {Object} v - The update payload containing the new role name.
    * @returns {Object} Result of the update query or error.
@@ -303,7 +303,7 @@ class Services{
     }
 
     let roleId = await this.getRoleId(nameorid);
-        
+
     const toUpdate = {};
 
     if(v.name) {
@@ -321,14 +321,14 @@ class Services{
     WHERE role_id = $${updateClause.values.length + 1}
     RETURNING role_id
     `;
-    return await pg.query(text, [...updateClause.values, roleId]);  
-  
+    return await pg.query(text, [...updateClause.values, roleId]);
+
   }
 
   /**
    * @method createProperties
    * @description Inserts a new service property definition.
-   * 
+   *
    * @param {Object} data - Contains name, title, description, and type of the property.
    * @returns {Object} Query result or error.
    */
@@ -346,7 +346,7 @@ class Services{
   /**
    * @method createRoles
    * @description Inserts a new role if it does not already exist.
-   * 
+   *
    * @param {String} name - Name of the role to insert.
    * @returns {Object} Query result or error.
    */
@@ -365,7 +365,7 @@ class Services{
   /**
    * @method getServicePropertyId
    * @description Retrieves the UUID of a service property based on name or ID using a stored procedure.
-   * 
+   *
    * @param {String} nameOrId - Name or ID of the service property.
    * @returns {String|Object} UUID string or error object.
    */
@@ -388,7 +388,7 @@ class Services{
     /**
      * @method getServiceId
      * @description Retrieves the UUID of a service using a stored procedure.
-     * 
+     *
      * @param {String} nameOrId - Name or ID of the service.
      * @returns {String|Object} UUID string or error object.
      */
@@ -400,7 +400,7 @@ class Services{
           'SELECT cork_status.get_service_id($1) AS service_id',
           [nameOrId]
         );
-    
+
         return await result.rows[0].service_id;
       } catch (err) {
         return {error: true, err: err}
@@ -412,7 +412,7 @@ class Services{
   /**
    * @method getUserId
    * @description Retrieves the UUID of a user using a stored procedure.
-   * 
+   *
    * @param {String} nameIn - Username.
    * @returns {String|Object} UUID string or error object.
    */
@@ -425,7 +425,7 @@ class Services{
           'SELECT cork_status.get_user_id($1) AS get_user_id',
           [nameIn]
         );
-    
+
         return await result.rows[0].get_user_id;
       } catch (err) {
         return {error: true, err: err}
@@ -437,7 +437,7 @@ class Services{
   /**
    * @method ensureUser
    * @description Ensures a user exists by name and returns the user ID (calls PL/pgSQL function).
-   * 
+   *
    * @param {String} username_in - Username to ensure/create.
    * @returns {String|Object} User UUID or error.
    */
@@ -450,7 +450,7 @@ class Services{
           'SELECT cork_status.ensure_user($1) AS ensure_user',
           [username_in]
         );
-    
+
         return await result.rows[0].ensure_user
       } catch (err) {
         return {error: true, err: err}
@@ -463,7 +463,7 @@ class Services{
   /**
    * @method ensureServiceProperty
    * @description Ensures a service property exists by name and returns its ID.
-   * 
+   *
    * @param {String} name_in - Property name.
    * @returns {String|Object} Property UUID or error.
    */
@@ -476,7 +476,7 @@ class Services{
           'SELECT cork_status.ensure_service_property($1) AS ensure_property_id',
           [name_in]
         );
-    
+
         // console.log(result.rows[0].ensure_property_id);
       } catch (err) {
         return {error: true, err: err}
@@ -488,7 +488,7 @@ class Services{
   /**
    * @method getRoleId
    * @description Retrieves the ID of a role using a stored procedure.
-   * 
+   *
    * @param {String} nameOrId - Role name or ID.
    * @returns {String|Object} Role UUID or error.
    */
@@ -501,7 +501,7 @@ class Services{
           'SELECT cork_status.get_role_id($1) AS role_id',
           [nameOrId]
         );
-    
+
         return await result.rows[0].role_id;
       } catch (err) {
         return {error: true, err: err}
@@ -514,7 +514,7 @@ class Services{
   /**
    * @method exampleQuery
    * @description Simple test method that runs a `SELECT NOW()` query in a transaction.
-   * 
+   *
    * @returns {void}
    */
   async exampleQuery() {

@@ -5,13 +5,17 @@ services:
     image: *main-image
     env_file:
       - .env
+    environment:
+      PGUSER: 'postgres'
+      PGHOST: 'db'
+      PGDATABASE: 'postgres'
+      PGPASSWORD: 'localhost'
+      PGPORT: 5432
     ports:
       - ${APP_HOST_PORT:-3000}:${APP_CONTAINER_PORT:-3000}
     volumes:
-      - ../../../services/package.json:/services/package.json
-      - ../../../services/package-lock.json:/services/package-lock.json
-      - ../../../services/lib:/services/lib
-      - ../../../services/data-seeder:/services/data-seeder
+      - ../../../services:/services
+      - /services/node_modules
 
   db:
     image: postgres:16
