@@ -10,16 +10,14 @@ RUN apt update && apt install -y \
   lsb-release \
   postgresql-client
 
-# Create directories
-RUN mkdir -p /services /services/data-seeder /services/lib
-
 # Set working directory
+RUN mkdir /services
 WORKDIR /services
 
-COPY package.json .
-COPY package-lock.json .
-COPY data-seeder ./data-seeder
-COPY lib ./lib
+COPY services/package.json .
+COPY services/package-lock.json .
+COPY services/data-seeder ./data-seeder
+COPY services/lib ./lib
 
 RUN npm install
 
