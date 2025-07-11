@@ -139,10 +139,6 @@ SELECT
   s.name,
   s.title,
   s.tags,
-  s.created_at,
-  s.updated_at,
-  s.created_by,
-  s.updated_by,
   s.service_status,
   s.p24_outage_ct,
   cork_status.filter_properties_by_name(s.service_properties, ARRAY[
@@ -157,10 +153,6 @@ SELECT
   s.name,
   s.title,
   s.tags,
-  s.created_at,
-  s.updated_at,
-  s.created_by,
-  s.updated_by,
   s.service_status,
   s.p24_outage_ct,
   cork_status.filter_properties_by_name(s.service_properties, ARRAY[
