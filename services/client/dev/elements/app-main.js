@@ -23,6 +23,21 @@ export default class AppMain extends Mixin(LitElement)
     this.page = '';
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    // todo: move to app state update
+    this.hideFullSiteLoader();
+  }
+
+  async hideFullSiteLoader(timeout=300){
+    // Hide the full site loader after a timeout
+    await new Promise(resolve => setTimeout(resolve, timeout));
+    document.querySelector('#site-loader').style.display = 'none';
+    this.style.display = 'block';
+  }
+
+
 }
 
 customElements.define('app-main', AppMain);

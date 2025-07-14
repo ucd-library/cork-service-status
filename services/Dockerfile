@@ -10,6 +10,8 @@ RUN apt update && apt install -y \
   lsb-release \
   postgresql-client
 
+COPY tools /tools
+
 # Set working directory
 RUN mkdir /services
 WORKDIR /services

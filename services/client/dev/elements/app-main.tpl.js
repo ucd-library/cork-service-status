@@ -8,7 +8,7 @@ import { html, css } from 'lit';
 export function styles() {
   const elementStyles = css`
     :host {
-      display: block;
+      display: none;
     }
   `;
 
@@ -17,23 +17,28 @@ export function styles() {
 
 export function render() {
 return html`
-  <ucd-theme-header>
-    <ucdlib-branding-bar
-      site-name="Cork Icon"
-      slogan="Demo Application">
-    </ucdlib-branding-bar>
-    <ucd-theme-primary-nav>
-      <a href="/">Services</a>
-    </ucd-theme-primary-nav>
-  </ucd-theme-header>
-
+  ${renderHeader.call(this)}
   <div class='l-container u-space-mt--large'>
     <ucdlib-pages
       id='app-pages'
       selected=${this.page}
       attr-for-selected='page-id'>
     </ucdlib-pages>
-
   </div>
 
-`;}
+`;
+}
+
+function renderHeader(){
+  return html`
+    <ucd-theme-header>
+      <ucdlib-branding-bar
+        site-name="UC Davis Library"
+        slogan="Service and Application Status">
+      </ucdlib-branding-bar>
+      <ucd-theme-primary-nav>
+        <a href="/">Services</a>
+      </ucd-theme-primary-nav>
+    </ucd-theme-header>
+  `;
+}
