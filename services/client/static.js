@@ -2,7 +2,7 @@ import path from 'path';
 import spaMiddleware from '@ucd-lib/spa-router-middleware';
 import { fileURLToPath } from 'url';
 import loaderHtml from './html/loader.html.js';
-//import { iconsets } from '@ucd-lib/cork-icon';
+import { iconsets } from '@ucd-lib/cork-icon';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,7 +28,6 @@ export default (app) => {
       next({
         routes : routes,
         title: title,
-        //corkIconConfig: {apiPath: '/api/icon'},
         logger: {
           logLevel: process?.env?.LOGGER_LEVEL || 'info'
         }
@@ -40,7 +39,7 @@ export default (app) => {
         title,
         bundle,
         loaderHtml,
-        //preloadedIcons: iconsets.preloadIconScript()
+        preloadedIcons: iconsets.preloadIconScript()
       });
     }
   });

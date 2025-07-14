@@ -1,11 +1,13 @@
-import {BaseStore} from '@ucd-lib/cork-app-utils';
+import {BaseStore, LruStore} from '@ucd-lib/cork-app-utils';
 
 class ServiceStore extends BaseStore {
 
   constructor() {
     super();
 
-    this.data = {};
+    this.data = {
+      query: new LruStore({name: 'service.query'})
+    };
     this.events = {};
   }
 

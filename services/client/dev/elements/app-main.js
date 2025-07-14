@@ -10,6 +10,7 @@ export default class AppMain extends Mixin(LitElement)
   static get properties() {
     return {
       page: {type: String},
+      _firstAppStateUpdate : { state: true }
     }
   }
 
@@ -21,13 +22,21 @@ export default class AppMain extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
     this.page = '';
+    this._firstAppStateUpdate = false;
+
+    this._injectModel('AppStateModel');
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  async _onAppStateUpdate(e) {
+    console.log('AppStateModel updated', e);
+    if ( !this._firstAppStateUpdate ) {
+      this._firstAppStateUpdate = true;
+      this.hideFullSiteLoader();
+    }
+    this.closeNav();
+    const { page, location } = e;
+    this.page = page;
 
-    // todo: move to app state update
-    this.hideFullSiteLoader();
   }
 
   async hideFullSiteLoader(timeout=300){
@@ -35,6 +44,20 @@ export default class AppMain extends Mixin(LitElement)
     await new Promise(resolve => setTimeout(resolve, timeout));
     document.querySelector('#site-loader').style.display = 'none';
     this.style.display = 'block';
+  }
+
+  /**
+   * @description Close the app's primary nav menu
+   */
+  closeNav(){
+    let ele = this.renderRoot.querySelector('ucd-theme-header');
+    if ( ele ) {
+      ele.close();
+    }
+    ele = this.renderRoot.querySelector('ucd-theme-quick-links');
+    if ( ele ) {
+      ele.close();
+    }
   }
 
 

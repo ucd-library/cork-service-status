@@ -18,12 +18,16 @@ export function styles() {
 export function render() {
 return html`
   ${renderHeader.call(this)}
+  <app-toast></app-toast>
   <div class='l-container u-space-mt--large'>
-    <ucdlib-pages
-      id='app-pages'
-      selected=${this.page}
-      attr-for-selected='page-id'>
-    </ucdlib-pages>
+    ${this.page ? html`
+      <ucdlib-pages
+        id='app-pages'
+        selected=${this.page}
+        attr-for-selected='page-id'>
+      <app-page-home page-id="home"></app-page-home>
+      </ucdlib-pages>
+      ` : html``}
   </div>
 
 `;
@@ -37,7 +41,6 @@ function renderHeader(){
         slogan="Service and Application Status">
       </ucdlib-branding-bar>
       <ucd-theme-primary-nav>
-        <a href="/">Services</a>
       </ucd-theme-primary-nav>
     </ucd-theme-header>
   `;

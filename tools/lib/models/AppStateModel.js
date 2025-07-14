@@ -7,11 +7,8 @@ class AppStateModelImpl extends AppStateModel {
   constructor() {
     super();
     this.store = AppStateStore;
-
-    this.init(config.app.appRoutes);
-
+    this.init(config.app.routes);
   }
-
 
   set(update) {
     if( update.location ) {

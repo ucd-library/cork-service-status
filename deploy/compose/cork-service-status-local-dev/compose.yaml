@@ -35,6 +35,7 @@ services:
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:${POSTGREST_HOST_PORT:-3001}
       PGRST_DB_SCHEMAS: api
       PGRST_DB_ANON_ROLE: postgres
+      PGRST_SERVER_CORS_ALLOWED_ORIGINS: "http://localhost:${APP_HOST_PORT:-3000}"
     depends_on:
       - db
   swagger:

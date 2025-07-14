@@ -7,8 +7,15 @@ app.use(express.json());
 
 
 const iconsets = [
-  { name: 'fontawesome-6.7-brands', aliases: ['fab']},
-  { name: 'fontawesome-6.7-solid', aliases: ['fas']},
+  {
+    name: 'fontawesome-6.7-brands',
+    aliases: ['fab']
+  },
+  {
+    name: 'fontawesome-6.7-solid',
+    aliases: ['fas'],
+    preload: ['check', 'xmark']
+  },
   //{ name: 'fontawesome-6.7-regular', aliases: ['far']},
 ];
 app.use('/icon', iconApiMiddleware({iconsets}));

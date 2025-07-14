@@ -9,8 +9,13 @@ class ServiceModel extends BaseModel {
 
     this.store = ServiceStore;
     this.service = ServiceService;
-      
+
     this.register('ServiceModel');
+  }
+
+  async query(opts={}){
+    opts = { view: 'brief', ...opts };
+    return this.service.query(opts);
   }
 
 }
