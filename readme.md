@@ -5,6 +5,11 @@ Status page for UC Davis Library apps and services.
 ## Status Workflow
 In progress
 
-## Status Fake Data Seeding
+## Local Dev
+- build images with `./deploy/cmds/build-local-dev.sh main`
+- start stack with `./deploy/cmds/start-app.sh`
+- start watch process with `./deploy/cmds/watch-client.sh`
+  
+### Status Fake Data Seeding
 
 To insert fake services into the local-dev app, ensure the app is running, and run `./deploy/cmds/seed-services.sh <number-of-services>`
