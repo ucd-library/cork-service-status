@@ -18,6 +18,8 @@ export function styles() {
 export function render() {
 return html`
   ${renderHeader.call(this)}
+  <app-error></app-error>
+  <app-loader></app-loader>
   <app-toast></app-toast>
   <div class='l-container u-space-mt--large'>
     ${this.page ? html`

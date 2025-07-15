@@ -14,7 +14,7 @@ const iconsets = [
   {
     name: 'fontawesome-6.7-solid',
     aliases: ['fas'],
-    preload: ['check', 'xmark']
+    preload: ['check', 'xmark', 'plug-circle-exclamation']
   },
   //{ name: 'fontawesome-6.7-regular', aliases: ['far']},
 ];

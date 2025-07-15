@@ -12,7 +12,5 @@ export function styles() {
 
 export function render() {
 return html`
-  <p>home</p>
   <service-query></service-query>
-
 `;}

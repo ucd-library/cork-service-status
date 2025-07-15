@@ -12,6 +12,7 @@ export function styles() {
 
 export function render() {
 return html`
-  <p>service query</p>
-
+  ${this.data.map(service => html`
+    <pre>${JSON.stringify(service, null, 2)}</pre>
+    `)}
 `;}

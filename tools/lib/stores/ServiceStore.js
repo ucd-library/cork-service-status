@@ -1,4 +1,6 @@
-import {BaseStore, LruStore} from '@ucd-lib/cork-app-utils';
+import {LruStore} from '@ucd-lib/cork-app-utils';
+import BaseStore from './BaseStore.js';
+
 
 class ServiceStore extends BaseStore {
 
@@ -9,6 +11,13 @@ class ServiceStore extends BaseStore {
       query: new LruStore({name: 'service.query'})
     };
     this.events = {};
+
+    this.errorSettings = {
+      'service.query': {
+        message: 'Unable to retrieve list of services'
+      }
+    }
+
   }
 
 }

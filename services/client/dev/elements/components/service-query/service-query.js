@@ -8,7 +8,7 @@ export default class ServiceQuery extends Mixin(LitElement)
 
   static get properties() {
     return {
-
+      data: {type: Array},
     }
   }
 
@@ -19,6 +19,7 @@ export default class ServiceQuery extends Mixin(LitElement)
   constructor() {
     super();
     this.render = render.bind(this);
+    this.data = [];
     this.appComponentController = new AppComponentController(this);
 
     this._injectModel('AppStateModel', 'ServiceModel');
@@ -33,9 +34,11 @@ export default class ServiceQuery extends Mixin(LitElement)
     this.getData();
   }
 
-  getData(){
+  async getData(){
     if ( !this.appComponentController.isOnActivePage() ) return;
-    this.ServiceModel.query();
+    const r = await this.ServiceModel.query();
+    if ( r.state !== 'loaded' ) return;
+    this.data = r.payload;
   }
 
 }

@@ -1,18 +1,54 @@
 class Config {
   constructor(){
 
-    this.app = this.getAppConfig();
+    this.app = {
+      title: this._getEnv('APP_TITLE', 'UC Davis Library Applications'),
+      routes: this._getEnv('APP_ROUTES', [], false, true),
+      logger: {
+        logLevel: this._getEnv('LOGGER_LEVEL', 'info')
+      }
+    };
+
+    this.postgrest = {
+      host: this._getEnv('POSTGREST_HOST', 'http://localhost:3001')
+    };
   }
 
   /**
    * @description Get the application configuration object written by the SPA middleware
    * @returns {Object} - Returns the application configuration object.
    */
-  getAppConfig(){
+  get appConfig(){
     if (typeof window !== 'undefined' && window.APP_CONFIG) {
       return window.APP_CONFIG;
     }
     return {};
+  }
+
+  /**
+   * @description Make the application configuration object written by the SPA middleware
+   * @param {Object} config - The configuration object to merge with the default configuration.
+   * @returns {Object} - Returns the merged configuration object.
+   */
+  makeAppConfig(config={}){
+    config.title = this.app.title.value;
+    config.routes = this.app.routes.value;
+    config.logger = {
+      logLevel: this.app.logger.logLevel.value
+    };
+    config[this.postgrest.host.name] = this.postgrest.host.value;
+    return config;
+  }
+
+  /**
+   * @description Get an environment variable and return it as an object with name and value properties.
+   * @param  {...any} args - Same as getEnv
+   * @returns
+   */
+  _getEnv(...args) {
+    const name = args[0];
+    const value = this.getEnv(...args);
+    return { name, value };
   }
 
   /**
@@ -25,7 +61,7 @@ class Config {
    * If 'server', throws an error only on the server.
    * @returns
    */
-  getEnv(name, defaultValue=false, errorIfMissing=false){
+  getEnv(name, defaultValue=false, errorIfMissing=false, parseJson=false) {
     let value;
     if( typeof window !== 'undefined' ) {
       value = window.APP_CONFIG?.[name];
@@ -45,6 +81,13 @@ class Config {
       value = false;
     } else if ( value?.toLowerCase?.() === 'true' ) {
       value = true;
+    }
+    if (parseJson) {
+      try {
+        value = JSON.parse(value);
+      } catch (e) {
+        throw new Error(`Environment variable ${name} is not valid JSON`);
+      }
     }
     return value;
 

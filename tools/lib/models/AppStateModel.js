@@ -7,7 +7,56 @@ class AppStateModelImpl extends AppStateModel {
   constructor() {
     super();
     this.store = AppStateStore;
-    this.init(config.app.routes);
+    this.init(config.app.routes.value);
+
+    this.loadingRequests = [];
+    this._loaderVisible = false;
+    this._hideLoaderTimer = null;
+
+
+    this.errorRequests = [];
+    this._errorVisible = false;
+    this._showErrorTimer = null;
+  }
+
+  addLoadingRequest(req) {
+    this.loadingRequests.push(req);
+
+    if (this._hideLoaderTimer) {
+      clearTimeout(this._hideLoaderTimer);
+      this._hideLoaderTimer = null;
+    }
+
+    if (!this._loaderVisible) {
+      this.showLoading();
+    }
+  }
+
+  removeLoadingRequest(req) {
+    this.loadingRequests = this.loadingRequests.filter(r => r.payload.id !== req.payload.id);
+
+    if (this.loadingRequests.length === 0 && !this._hideLoaderTimer) {
+
+      this._hideLoaderTimer = setTimeout(() => {
+        this._hideLoaderTimer = null;
+        if (this.loadingRequests.length === 0) {
+
+          this.hideLoading();
+        }
+      }, 100);
+    }
+  }
+
+  addErrorRequest(req) {
+    this.errorRequests.push(req);
+    if ( this._errorVisible || this._showErrorTimer ) return;
+
+    this._showErrorTimer = setTimeout(() => {
+      this._showErrorTimer = null;
+      this.showError({requests: this.errorRequests});
+      this.errorRequests = [];
+    }, 100);
+
   }
 
   set(update) {
@@ -25,10 +74,12 @@ class AppStateModelImpl extends AppStateModel {
   }
 
   showLoading(){
+    this._loaderVisible = true;
     this.store.emit(this.store.events.APP_LOADING_UPDATE, {show: true});
   }
 
   hideLoading(){
+    this._loaderVisible = false;
     this.store.emit(this.store.events.APP_LOADING_UPDATE, {show: false});
     if ( this.toastOnPageLoad ) {
       this.showToast(this.toastOnPageLoad);
@@ -39,16 +90,17 @@ class AppStateModelImpl extends AppStateModel {
   /**
    * @description show an error message
    * @param {Object} opts - error message options
-   * @param {String} opts.errors - array of errors with expected format from PageDataController
-   * @param {String} opts.error - A single cork-app-utils error object if only one error
+   * @param {String} opts.requests - array of cork-app-utils request objects that caused the error
    * @param {String} opts.message - A single error message if only one error. Optional.
-   * @param {Boolean} opts.showLoginButton - Show a login button. Is automatically set to true if the error is a 401 or 403
    */
   showError(opts){
+    this._errorVisible = true;
     this.store.emit(this.store.events.APP_ERROR_UPDATE, {show: true, opts});
+    console.log('AppStateModelImpl.showError', opts);
   }
 
   hideError(){
+    this._errorVisible = false;
     this.store.emit(this.store.events.APP_ERROR_UPDATE, {show: false});
   }
 

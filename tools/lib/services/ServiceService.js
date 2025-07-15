@@ -1,4 +1,4 @@
-import BaseService from './BaseService.js'
+import {BaseService} from '@ucd-lib/cork-app-utils';
 import ServiceStore from '../stores/ServiceStore.js';
 import payload from '../payload.js';
 
@@ -15,8 +15,9 @@ class ServiceService extends BaseService {
     const store = this.store.data.query;
     const table = opts?.view === 'full' ? 'service_view_full' : 'service_view_brief';
     const url = `${this.baseUrl}${table}`;
+
+    // construct postgrest query string
     const qs = {};
-    console.log('querying service', id, opts);
 
     await this.checkRequesting(
       id, store,

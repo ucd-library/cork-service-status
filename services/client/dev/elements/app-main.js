@@ -28,7 +28,7 @@ export default class AppMain extends Mixin(LitElement)
   }
 
   async _onAppStateUpdate(e) {
-    console.log('AppStateModel updated', e);
+    this.logger.info('appStateUpdate', e);
     if ( !this._firstAppStateUpdate ) {
       this._firstAppStateUpdate = true;
       this.hideFullSiteLoader();
