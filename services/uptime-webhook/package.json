@@ -1,0 +1,24 @@
+{
+  "name": "cork-service-status-uptime-webhook",
+  "version": "1.0.0",
+  "description": "Google Cloud Run webhook service for uptime alerts",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test/test-webhook.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2",
+    "@google-cloud/storage": "^7.0.0",
+    "@ucd-lib/logger": "^0.0.6"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
