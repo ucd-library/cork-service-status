@@ -1,0 +1,8 @@
+{
+  "name": "cork-service-status-uptime-webhook",
+  "main": "index.js",
+  "type" : "module",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.0.0"
+  }
+}
