@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  uptime-webhook:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - WEBHOOK_TOKEN=local-dev-token
+      - POSTGREST_URL=http://host.docker.internal:3001
+      - USE_GCS=false
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - postgrest
+    networks:
+      - cork-network
+
+  # For testing - connects to the main app's postgrest
+  postgrest:
+    image: postgrest/postgrest
+    ports:
+      - "3001:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:localhost@host.docker.internal:5432/postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3001
+      PGRST_DB_SCHEMAS: api
+      PGRST_DB_ANON_ROLE: postgres
+      PGRST_SERVER_CORS_ALLOWED_ORIGINS: "*"
+    networks:
+      - cork-network
+
+networks:
+  cork-network:
+    driver: bridge

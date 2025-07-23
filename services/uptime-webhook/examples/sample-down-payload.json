@@ -1,0 +1,48 @@
+{
+  "incident": {
+    "incident_id": "0.mzaw5l8dr2hb",
+    "resource_id": "",
+    "resource_name": "library-api-production",
+    "resource": {
+      "type": "uptime_check_id",
+      "resource_name": "library-api-production",
+      "labels": {
+        "project_id": "your-gcp-project",
+        "check_id": "library-api-uptime-check"
+      }
+    },
+    "started_at": "2024-01-15T10:30:00.000Z",
+    "ended_at": null,
+    "policy_name": "Library API Uptime Policy",
+    "policy_user_labels": {
+      "service": "library-api",
+      "environment": "production",
+      "team": "digital-library"
+    },
+    "condition_name": "Library API Uptime Check Failure",
+    "condition": {
+      "displayName": "Library API Uptime Check Failure",
+      "conditionThreshold": {
+        "filter": "resource.type=\"uptime_check_id\" AND resource.label.check_id=\"library-api-uptime-check\"",
+        "comparison": "COMPARISON_TRUE",
+        "thresholdValue": 1,
+        "duration": "60s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "1200s",
+            "perSeriesAligner": "ALIGN_NEXT_OLDER",
+            "crossSeriesReducer": "REDUCE_COUNT_TRUE",
+            "groupByFields": [
+              "resource.label.project_id",
+              "resource.label.check_id"
+            ]
+          }
+        ]
+      }
+    },
+    "url": "https://api.library.ucdavis.edu/health",
+    "summary": "Library API is experiencing downtime - uptime check failed after 3 consecutive failures",
+    "state": "OPEN"
+  },
+  "version": "1.2"
+}
