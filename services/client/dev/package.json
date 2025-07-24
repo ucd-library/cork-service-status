@@ -15,7 +15,7 @@
     "@ucd-lib/cork-app-build": "^0.5.0",
     "@ucd-lib/cork-app-state": "^3.0.1",
     "@ucd-lib/cork-app-utils": "^6.3.1",
-    "@ucd-lib/cork-icon": "^1.0.0",
+    "@ucd-lib/cork-icon": "^1.0.2",
     "@ucd-lib/theme-elements": "^3.1.4",
     "@ucd-lib/theme-sass": "^6.0.1",
     "fs-extra": "^11.3.0",

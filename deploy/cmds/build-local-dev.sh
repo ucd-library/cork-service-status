@@ -16,4 +16,4 @@ cork-kube build exec \
   --version $VERSION \
   --override-tag local-dev \
   --depth $DEPTH \
-  --no-cache-from
+  --no-cache
