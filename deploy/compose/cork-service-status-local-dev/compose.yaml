@@ -35,10 +35,15 @@ services:
       FUNCTION_TARGET: gcWebhookCorkStatus
       FUNCTION_SIGNATURE_TYPE: http
       FUNCTION_SOURCE: /services/uptime-webhook
-      WEBHOOK_KEY: ${WEBHOOK_KEY:-localhost}
-      DISABLE_AUTH: ${DISABLE_AUTH:-false}
+      DISABLE_AUTH: ${DISABLE_AUTH:-true}
+      GOOGLE_APPLICATION_CREDENTIALS: /etc/service-account.json
     depends_on:
       - postgrest
+    volumes:
+      - ../../../services/uptime-webhook:/services/uptime-webhook
+      - /services/uptime-webhook/node_modules
+      - ../../../secrets/gc-sa-key.json:/etc/service-account.json
+    command: ["npm", "run", "start-webhook"]
   postgrest:
     image: postgrest/postgrest
     ports:

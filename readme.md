@@ -7,7 +7,6 @@ In progress
 
 ## Local Dev
 - build images with `./deploy/cmds/build-local-dev.sh main`
-- ensure you can pull webhook image with `./deploy/cmds/register-artifact-registry.sh`
 - start cluster with `cd ./deploy/compose/cork-service-status-local-dev` and `docker compose up -d`
 - start app with `./deploy/cmds/start-app.sh`
 - start watch process with `./deploy/cmds/watch-client.sh`
