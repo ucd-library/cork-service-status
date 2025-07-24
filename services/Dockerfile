@@ -17,10 +17,11 @@ RUN mkdir /services
 WORKDIR /services
 
 COPY services/package.json .
-#COPY services/package-lock.json .
+COPY services/package-lock.json .
 COPY services/data-seeder ./data-seeder
 COPY services/lib ./lib
 COPY services/client ./client
+COPY services/uptime-webhook ./uptime-webhook
 
 # client build
 RUN cd /services/client/dev && \
