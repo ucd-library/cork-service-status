@@ -9,5 +9,6 @@ gcloud run deploy cork-service-status-uptime-webhook \
   --function gcWebhookCorkStatus \
   --base-image nodejs22 \
   --project digital-ucdavis-edu \
+  --region us-west1 \
   --set-secrets=WEBHOOK_KEY=cork-service-status-webhook-key:latest \
   --allow-unauthenticated

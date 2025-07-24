@@ -4,5 +4,5 @@
     // Your code here
 
     // Send an HTTP response
-    res.send(`Steve is great: ${process.env.WEBHOOK_SECRET}`);
+    res.send(`Steve is great: ${process.env.WEBHOOK_KEY}`);
   });

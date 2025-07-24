@@ -7,9 +7,13 @@ In progress
 
 ## Local Dev
 - build images with `./deploy/cmds/build-local-dev.sh main`
-- start stack with `./deploy/cmds/start-app.sh`
+- ensure you can pull webhook image with `./deploy/cmds/register-artifact-registry.sh`
+- start cluster with `cd ./deploy/compose/cork-service-status-local-dev` and `docker compose up -d`
+- start app with `./deploy/cmds/start-app.sh`
 - start watch process with `./deploy/cmds/watch-client.sh`
   
 ### Status Fake Data Seeding
 
 To insert fake services into the local-dev app, ensure the app is running, and run `./deploy/cmds/seed-services.sh <number-of-services>`
+
+### Webhook
