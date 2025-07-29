@@ -46,7 +46,7 @@ BEGIN
     FROM cork_status.service_property_value spv
     JOIN cork_status.service_property sp ON sp.service_property_id = spv.service_property_id
     WHERE sp.name IN ('url', 'admin_url')
-      AND spv.value ILIKE '%' || host || '%'
+      AND spv.value::text ILIKE '%' || host || '%'
     LIMIT 1;
 
     IF service_id IS NULL THEN
@@ -74,7 +74,7 @@ BEGIN
 
     -- Insert the event
     INSERT INTO cork_status.event (service_id, event_type, event_payload)
-    VALUES (service_id, event_type, payload);
+    VALUES (service_id, event_type::cork_status.event_type, payload);
 
 END;
 $$ LANGUAGE plpgsql;

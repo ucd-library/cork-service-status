@@ -40,6 +40,7 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: /etc/service-account.json
       WRITE_TO_BUCKET: ${WRITE_TO_BUCKET:-false}
       ENABLE_LOAD_EVENTS: ${ENABLE_LOAD_EVENTS:-true}
+      POSTGREST_URL: http://postgrest:${POSTGREST_CONTAINER_PORT:-3000}
     depends_on:
       - postgrest
     volumes:
