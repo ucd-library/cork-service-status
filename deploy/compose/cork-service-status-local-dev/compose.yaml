@@ -26,6 +26,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ../../../services/pg/schema:/docker-entrypoint-initdb.d
+
   webhook:
     image: *main-image
     ports:
@@ -37,6 +38,8 @@ services:
       FUNCTION_SOURCE: /services/uptime-webhook
       DISABLE_AUTH: ${DISABLE_AUTH:-true}
       GOOGLE_APPLICATION_CREDENTIALS: /etc/service-account.json
+      WRITE_TO_BUCKET: ${WRITE_TO_BUCKET:-false}
+      ENABLE_LOAD_EVENTS: ${ENABLE_LOAD_EVENTS:-true}
     depends_on:
       - postgrest
     volumes:
@@ -44,6 +47,7 @@ services:
       - /services/uptime-webhook/node_modules
       - ../../../secrets/gc-sa-key.json:/etc/service-account.json
     command: ["npm", "run", "start-webhook"]
+
   postgrest:
     image: postgrest/postgrest
     ports:
@@ -56,6 +60,7 @@ services:
       PGRST_SERVER_CORS_ALLOWED_ORIGINS: "http://localhost:${APP_HOST_PORT:-3000}"
     depends_on:
       - db
+
   swagger:
     image: swaggerapi/swagger-ui
     ports:
@@ -66,6 +71,7 @@ services:
       API_URL: http://localhost:3001/
     depends_on:
       - postgrest
+
   adminer:
     image: adminer:5
     ports:
