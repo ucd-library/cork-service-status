@@ -25,6 +25,7 @@ export default class AppMain extends Mixin(LitElement)
     this._firstAppStateUpdate = false;
 
     this._injectModel('AppStateModel');
+    this.AppStateModel.refresh();
   }
 
   async _onAppStateUpdate(e) {

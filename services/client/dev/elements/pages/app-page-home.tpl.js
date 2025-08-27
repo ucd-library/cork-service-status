@@ -12,5 +12,10 @@ export function styles() {
 
 export function render() {
 return html`
-  <service-query></service-query>
+
+
+<service-query use-url-query show-controls></service-query>
+
+
+  
 `;}

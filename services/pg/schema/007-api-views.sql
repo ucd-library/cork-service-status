@@ -143,7 +143,15 @@ SELECT
   s.p24_outage_ct,
   cork_status.filter_properties_by_name(s.service_properties, ARRAY[
     'url', 'is_dev'
-  ]) AS service_properties
+  ]) AS service_properties,
+
+  COALESCE((
+    SELECT (p->'values'->0->>'value')::boolean
+    FROM json_array_elements(s.service_properties) AS p
+    WHERE p->>'name' = 'is_dev'
+    LIMIT 1
+  ), false) AS is_dev
+
 FROM api.service_view_full s;
 
 
@@ -157,5 +165,13 @@ SELECT
   s.p24_outage_ct,
   cork_status.filter_properties_by_name(s.service_properties, ARRAY[
     'url', 'is_dev'
-  ]) AS service_properties
+  ]) AS service_properties,
+
+  COALESCE((
+    SELECT (p->'values'->0->>'value')::boolean
+    FROM json_array_elements(s.service_properties) AS p
+    WHERE p->>'name' = 'is_dev'
+    LIMIT 1
+  ), false) AS is_dev
+
 FROM api.service_view_full_public s;
