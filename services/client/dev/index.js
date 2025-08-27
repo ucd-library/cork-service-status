@@ -13,3 +13,4 @@ import './elements/components/app-error/app-error.js';
 import './elements/components/app-loader/app-loader.js';
 import './elements/components/app-toast/app-toast.js';
 import './elements/components/service-query/service-query.js';
+import './elements/components/service-card/service-card.js';

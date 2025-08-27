@@ -13,9 +13,11 @@ class ServiceModel extends BaseModel {
     this.register('ServiceModel');
   }
 
-  async query(opts={}){
-    opts = { view: 'brief', ...opts };
-    return this.service.query(opts);
+  async query(opts={}, is_brief=true, is_public=false, url=''){
+    opts = is_brief ? { view: 'brief', is_public,  ...opts }: { view: 'full', is_public, ...opts };
+    const r = await this.service.query(opts, url);
+
+    return r;
   }
 
 }
