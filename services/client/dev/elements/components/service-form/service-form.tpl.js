@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 
 export function styles() {
   const elementStyles = css`
-    app-page-home {
+    :host {
       display: block;
     }
   `;
@@ -12,7 +12,5 @@ export function styles() {
 
 export function render() {
 return html`
-
-  <service-form></service-form>
-  
+  Form Change
 `;}
