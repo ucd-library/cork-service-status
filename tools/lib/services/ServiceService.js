@@ -69,6 +69,36 @@ class ServiceService extends BaseService {
 
   }
 
+  async create(data){
+    return await this.request({
+      url: `/api/services`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      body: JSON.stringify(data)
+    });
+  }
+
+  async update(id, data) {
+    return this.request({
+      url: `/api/services?service_id${encodeURIComponent(id)}`,
+      method: 'PUTs',
+      headers: {
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(data),
+      onUpdate: (resp) => this.store.setCurrent(Array.isArray(resp) ? resp[0] : resp)
+    });
+  }
+
+  async remove(id){
+    return this.request({
+      url: `/api/services?service_id${encodeURIComponent(id)}`,
+      method: 'DELETE',
+      onUpdate: resp => this.store.remove(id, this.store.data.current)
+    });
+  }
+
 }
 
 const service = new ServiceService();

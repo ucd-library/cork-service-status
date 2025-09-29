@@ -13,6 +13,10 @@ export function styles() {
 export function render() {
 return html`
 
-  <service-form></service-form>
+  <div class="l-3col l-3col--25-50-25">
+    <div class="l-second">
+      <service-form ></service-form>
+    </div>
+  </div>
   
 `;}
