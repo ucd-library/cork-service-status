@@ -8,6 +8,7 @@ class ServiceService extends BaseService {
     super();
     this.store = ServiceStore;
     this.baseUrl = 'http://localhost:3001/';
+    this.ID = 'service_id';
   }
 
   async query(opts, url){
@@ -69,35 +70,69 @@ class ServiceService extends BaseService {
 
   }
 
-  async create(data){
-    return await this.request({
-      url: `/api/services`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-      body: JSON.stringify(data)
-    });
-  }
 
-  async update(id, data) {
+  async createService(data){
     return this.request({
-      url: `/api/services?service_id${encodeURIComponent(id)}`,
-      method: 'PUTs',
-      headers: {
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
+      url: `${this.baseUrl}rpc/create_service`,
+      fetchOptions : {
+        method : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Prefer': 'return=representation',
+        },
+        body: JSON.stringify({ payload: data })
       },
-      body: JSON.stringify(data),
-      onUpdate: (resp) => this.store.setCurrent(Array.isArray(resp) ? resp[0] : resp)
+      onLoading : req => this.store.createServiceLoading(req),
+      onLoad : async res => {
+        if (!res.response.ok) {
+          const err = await res;
+          throw new Error(`${res.response.status} ${res.response.statusText} ${err.response.message || err.response.error || ''}`);
+        }
+        const result = await res;
+        this.store.createServiceLoaded(result);
+      },
+      onError : e => this.store.createServiceError(e)
+    });
+  }
+  
+  async updateService(data){
+    return this.request({
+      url: `${this.baseUrl}rpc/update_service`,
+      fetchOptions : {
+        method : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Prefer': 'return=representation',
+        },
+        body: JSON.stringify({ payload: data })
+      },
+      onLoading : req => this.store.updateServiceLoading(req),
+      onLoad : async res => {
+        if (!res.response.ok) {
+          const err = await res;
+          throw new Error(`${res.response.status} ${res.response.statusText} ${err.response.message || err.response.error || ''}`);
+        }
+        const result = await res;
+        this.store.updateServiceLoaded(result);
+      },
+      onError : e => this.store.updateServiceError(e)
     });
   }
 
-  async remove(id){
-    return this.request({
-      url: `/api/services?service_id${encodeURIComponent(id)}`,
-      method: 'DELETE',
-      onUpdate: resp => this.store.remove(id, this.store.data.current)
-    });
-  }
+  // async removeService(id){
+  //   return this.request({
+  //     url: `/api/services/${encodeURIComponent(id)}`,
+  //     fetchOptions : {
+  //       method : 'DELETE',
+  //     },      
+  //     onLoading : request => this.store.removeServiceLoading(request, id),
+  //     checkCached : () => this.store.data.removeService,
+  //     onLoad : result => this.store.removeServiceLoaded(result.body, id),
+  //     onError : e => this.store.removeServiceError(e, id)    
+  //   });
+  // }
 
 }
 

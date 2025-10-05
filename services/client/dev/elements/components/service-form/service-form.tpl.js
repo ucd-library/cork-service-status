@@ -54,6 +54,9 @@ export function styles() {
         background: #ffbf00;
         color:#022851;
     }
+    .table-padding{
+        padding:.75em;
+    }
 
     hr {
         border: .05rem solid #ffbf00;
@@ -77,6 +80,10 @@ export function styles() {
         font-weight:bold; 
         user-select:none; 
 
+    }
+    .confirmation-message {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
     .removeTag {
@@ -135,17 +142,19 @@ export function styles() {
     ];
 }
 
-export function render() {
+export function renderForm(){
 return html`
-  <h2 class="heading--weighted-underline"><span class="heading--weighted--weighted">Edit</span> Service</h2>
 
-  <br />
+<div id='status-form'>
+    <h2 class="heading--weighted-underline"><span class="heading--weighted--weighted">Edit</span> Service</h2>
 
-  <span style="display:flex; align-items:center; gap:1rem;">
+    <br />
+
+    <span style="display:flex; align-items:center; gap:1rem;">
     <h4 class="u-space-mb--small">Create Service Information</h4>
     <button style="background:none;border:none;" @click=${() => this.resetInformation()}><h3>&#x27F3;</h3></button>
-  </span>
-  <fieldset>
+    </span>
+    <fieldset>
     <div class="field-container ${this.validationHandler.errorClass('name')}">
         <label for="name">Name <abbr title="Required">*</abbr></label>
         <input 
@@ -211,23 +220,23 @@ return html`
         <ul class="list--reset">
             <li>
                 <input id="styled-checkbox1" 
-                       name="checkbox" 
-                       type="checkbox" 
-                       .checked=${this.service.role} 
-                       @change=${e => this._setServicePublic(e.target.checked)}
-                       ><label for="styled-checkbox1">Public Service</label></li>
+                        name="checkbox" 
+                        type="checkbox" 
+                        .checked=${this.service.role} 
+                        @change=${e => this._setServicePublic(e.target.checked)}
+                        ><label for="styled-checkbox1">Public Service</label></li>
         </ul>
     </div>
 
     <br />
 
-  </fieldset>
+    </fieldset>
 
-  <span style="display:flex; align-items:center; gap:1rem;">
+    <span style="display:flex; align-items:center; gap:1rem;">
     <h4 class="u-space-mb--small">Create Service Property Information</h4>
     <button style="background:none;border:none;" @click=${() => this.resetInformation("properties")}><h3>&#x27F3;</h3></button>
-  </span>
-  <fieldset> 
+    </span>
+    <fieldset> 
     <div class="toolbar">
         <button class="btn btn--alt3" @click=${this._addItem}>Add Service Property</button>
     </div>
@@ -247,9 +256,9 @@ return html`
                 <ul class="list--reset">
                     <li>
                     <input id="${idx}-public-checkbox" 
-                           type="checkbox" 
-                           .checked=${it.role}
-                           @change=${e => this._setServicePropertyPublic(it.name, e.target.checked)}
+                            type="checkbox" 
+                            .checked=${it.role}
+                            @change=${e => this._setServicePropertyPublic(it.name, e.target.checked)}
                     >
                     <label for="${idx}-public-checkbox">Public Service Property</label>
                     </li>
@@ -289,44 +298,110 @@ return html`
                     <ul class="list--reset">
                         <li>
                             <input id="prop-${idx}-bool" type="checkbox"
-                                .checked=${it.value === true}
-                                @change=${e => this._booleanUpdate(e.target.checked)} />
+                                .checked=${it.values?.[0]?.value === true || it.values?.[0] === true}
+                                @change=${e => this._booleanUpdate(idx, e.target.checked)} />
                                 <label for="prop-${idx}-bool">In Development</label>
                         </li>
                     </ul>
                 </div>
                 ` : this._optionTypeFor(it.name) === 'array' ? html`
-                    <div class="array-values">
-                    ${(Array.isArray(it.value) ? it.value : []).map((val, i) => html`
-                        <div class="array-value-row" style="display:flex; align-items:center; gap:.5rem; margin-bottom:.75rem;">
-                        <input type="text"
-                                .value=${val}
-                                @input=${e => this._onArrayValueInput(idx, i, e.target.value)} />
-                        <button  style="background:#ffbf00; border:none;padding:1.1em 1.25em;color:#022851" type="button" @click=${() => this._removeArrayValue(idx, i)}>−</button>
+                        <div class="array-values">
+                        ${(Array.isArray(it.values) ? it.values : []).map((val, i) => html`
+                            <div class="array-value-row" style="display:flex; align-items:center; gap:.5rem; margin-bottom:.75rem;">
+                            <input type="text"
+                                    .value=${(val?.value ?? val) ?? ''}
+                                    @input=${e => this._onArrayValueInput(idx, i, e.target.value)} />
+                            <button type="button"
+                                    style="background:#ffbf00;border:none;padding:1.1em 1.25em;color:#022851"
+                                    @click=${() => this._removeArrayValue(idx, i)}>−</button>
+                            </div>
+                        `)}
+                        <br />
+                        <button class="btn btn--alt3 btn--block" type="button" @click=${() => this._addArrayValue(idx)}>Add item</button>
                         </div>
-
-                    `)}
-                    <br />
-                    <button class="btn btn--alt3 btn--block" type="button" @click=${() => this._addArrayValue(idx)}>Add item</button>
-                    </div>
                 ` : html`
                     <textarea id="prop-${idx}-text"
-                            rows="5"
-                            .value=${this._valueToString(it)}
-                            @input=${e => this._onValueInput(it.name, e.target.value)}>
+                        rows="5"
+                        .value=${this._valueToString(it)}
+                        @input=${e => this._onValueInput(it.name, e.target.value)}>
                     </textarea>
                 `}
             </div>
         </div>     
     `)}
 
-  </fieldset>
+    </fieldset>
 
-  <input
+    <input
     type="button"
     class="btn btn--primary btn--block"
     @click=${this.submitForm}
     value="Submit Form" 
-    .disabled=${!this._formChanged}/>
+    />
 
+    <br />
+</div>
+`;}
+
+export function renderConfirmation(){
+return html`
+<div id='status-confirmation'>
+    <h2 class="heading--weighted-underline"><span class="heading--weighted--weighted">Review</span> Service</h2>
+
+    <div class="confirmation-message">
+        <p>${this.confirmationMessage}</p>
+    </div>
+
+    
+    <div class="summary-table">
+    <h4 class="u-space-mb--small">Service Summary</h4>
+    <fieldset>
+
+        <table class="table--admin">
+            <br>
+            <thead>
+                <tr>
+                    <th style="width:50%">Service</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${this.service.name ? html`<tr><td><b>Service Name</b></td><td class="table-padding">${this.service.name}</td></tr>`: html``}
+                ${this.service.title ? html`<tr><td><b>Service Title</b></td><td class="table-padding">${this.service.title}</td></tr>`: html``}
+                ${this.service.tags ? html`<tr><td><b>Service Tags</b></td><td class="table-padding">${this.service.tags.map(t => html`${t} <br>`)} </td></tr>`: html``}
+                ${this.service.description ? html`<tr><td><b>Service Description</b></td><td class="table-padding">${this.service.description}</td></tr>`: html``}
+                ${this.service.public ? html`<tr><td><b>Is Public Service?</b></td><td class="table-padding">${this.service.public}</td></tr>`: html``}
+            </tbody>
+
+        </table>
+
+        <table class="table--admin">
+            <thead>
+                <tr>
+                    <th style="width:50%">Service Properties</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${this.serviceProperties ? this.serviceProperties.map(sp => {
+                    return html`<tr><td><b>${sp.name}</b></td>
+                                    <td class="table-padding">${sp.values.length > 1 ? 
+                                        html`${sp?.values.map(s => html`${s.value}<br>`)}`
+                                        :html`${sp?.values[0]?.value}`}  </td>                               
+                                </tr>`;
+                }) : ''}
+            </tbody>
+        </table>
+    </div>
+    </fieldset>
+    <button class="btn btn--primary btn--block" @click=${() => this.navigateToForm()}>Go Back to Form</button>
+</div>
+`;
+}
+
+export function render() {
+return html`
+    <ucdlib-pages selected=${'status-' + this.page}>
+        ${this.renderForm()}
+        ${this.renderConfirmation()}
+    </ucdlib-pages>
+  
 `;}

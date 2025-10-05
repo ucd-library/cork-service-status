@@ -20,18 +20,18 @@ class ServiceModel extends BaseModel {
     return r;
   }
 
-  async create(data){
-    const r = await this.service.create(data);
+  async createService(data){
+    const r = await this.service.createService(data);
     return r;
   }
   
-  async update(id, data){
-    const r = await this.service.update(id, data);
+  async updateService(data){
+    const r = await this.service.updateService(data);
     return r;
   }
 
-  async remove(id){
-    const r = await this.service.remove(id);
+  async removeService(id){
+    const r = await this.service.removeService(id);
     return r;
   }
 
