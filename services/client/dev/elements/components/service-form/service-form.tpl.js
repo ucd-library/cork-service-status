@@ -337,6 +337,7 @@ return html`
     class="btn btn--primary btn--block"
     @click=${this.submitForm}
     value="Submit Form" 
+    .disabled=${!this._formChanged}
     />
 
     <br />
@@ -365,11 +366,11 @@ return html`
                 </tr>
             </thead>
             <tbody>
-                ${this.service.name ? html`<tr><td><b>Service Name</b></td><td class="table-padding">${this.service.name}</td></tr>`: html``}
-                ${this.service.title ? html`<tr><td><b>Service Title</b></td><td class="table-padding">${this.service.title}</td></tr>`: html``}
-                ${this.service.tags ? html`<tr><td><b>Service Tags</b></td><td class="table-padding">${this.service.tags.map(t => html`${t} <br>`)} </td></tr>`: html``}
-                ${this.service.description ? html`<tr><td><b>Service Description</b></td><td class="table-padding">${this.service.description}</td></tr>`: html``}
-                ${this.service.public ? html`<tr><td><b>Is Public Service?</b></td><td class="table-padding">${this.service.public}</td></tr>`: html``}
+                ${this.service?.name ? html`<tr><td><b>Service Name</b></td><td class="table-padding">${this.service.name}</td></tr>`: html``}
+                ${this.service?.title ? html`<tr><td><b>Service Title</b></td><td class="table-padding">${this.service.title}</td></tr>`: html``}
+                ${this.service?.tags ? html`<tr><td><b>Service Tags</b></td><td class="table-padding">${this.service.tags.map(t => html`${t} <br>`)} </td></tr>`: html``}
+                ${this.service?.description ? html`<tr><td><b>Service Description</b></td><td class="table-padding">${this.service.description}</td></tr>`: html``}
+                ${this.service?.public ? html`<tr><td><b>Is Public Service?</b></td><td class="table-padding">${this.service.public}</td></tr>`: html``}
             </tbody>
 
         </table>

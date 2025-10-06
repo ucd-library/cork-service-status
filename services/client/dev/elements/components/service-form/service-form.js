@@ -38,6 +38,7 @@ export default class ServiceForm extends Mixin(LitElement)
     this._dragId = null;
     this._formChanged = false;
     this.confirmationMessage = '';
+    console.log();
 
     this.servicePropertiesOptions = [
       { title: 'Development Service', type: 'boolean', name: 'is_dev', present: false},
@@ -59,45 +60,15 @@ export default class ServiceForm extends Mixin(LitElement)
     this.parseData();
   }
 
-  // _onAppStateUpdate() {
-  //   this.parseData();
-  // }
-
-  // firstUpdated() {
-  
-
-  //   if (this.serviceId) {
-
-  //   } else {
-
-  //   }
-
-
-  //   this.requestUpdate();
-  // }
-
-
-  // updated(changeProps) {
-  //   const deepEqual = (prev, next) => {
-  //     JSON.stringify(prev) === JSON.stringify(next)
-  //   };
-
-  //   if(changeProps.get('service') == undefined &&  
-  //      changeProps.get('serviceProperties') == undefined) 
-  //       return;
-
-  //   let serviceChange = !deepEqual(this._originalService, this.service);
-  //   let servicePropChange = !deepEqual(this.originalServiceProperties, this.serviceProperties);
-  //   this._formChanged = serviceChange || servicePropChange;
-
-  //   this.requestUpdate();
-  // }
-
+  /**
+   * @description Parse data for form
+   * @returns {Promise<void>}
+   */
   async parseData() {
-    this.page = 'form';
-
     if ( !this.serviceId && !Object.keys(this.service).length ) {
       this.updateForm = false;
+      this.page = 'form';
+
       return;
     };
 
@@ -113,10 +84,24 @@ export default class ServiceForm extends Mixin(LitElement)
     this.originalService = structuredClone(this.service);
     this.originalServiceProperties = structuredClone(this.serviceProperties)
 
+    this.page = 'form';
+
     this.requestUpdate();
   }
 
+  updated(changes){
 
+    if( changes.has('service') || changes.has('serviceProperties') ){
+      this.activateSubmit();
+    }
+    
+  }
+
+  /**
+   * @description Reset form information to original values
+   * @param {String|null} property - if null, reset service info, otherwise reset service properties
+   * @returns {Promise<void>}
+   */
   resetInformation(property=null){
     if(!property){
       this.service.name = this.originalService.name;
@@ -132,6 +117,31 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
 
+  /**
+   * @description Activate submit button if form has changed
+   */
+  activateSubmit(){
+    if(this.updateForm && !this.originalService) return;
+
+    if(this.service?.name !== this.originalService?.name ||
+      this.service?.title !== this.originalService?.title ||
+      ((this.service?.description || '') !== (this.originalService?.description || '')) ||
+      ((this.service?.role || '') !== (this.originalService?.role || '')) ||
+      ((this.service?.tags || []).sort().join(',') !== (this.originalService?.tags || []).sort().join(',')) ||
+      JSON.stringify(this.serviceProperties) !== JSON.stringify(this.originalServiceProperties)
+    ){
+      this._formChanged = true;
+    }
+
+    this.requestUpdate();
+  }
+
+  /**
+   * @description Check for missing or blank fields
+   * @param {Object} obj - object to check
+   * @param {Array} fields - array of field names to check
+   * @returns {Object} - { ok: Boolean, ismissing: Array }
+   */
   _checkFields(obj, fields) {
     const isBlank = v =>
       v == null || // null or undefined
@@ -149,6 +159,11 @@ export default class ServiceForm extends Mixin(LitElement)
 
 
   //service functions
+
+  /**
+   * @description Check for missing or blank fields
+   * @returns {void}
+  */
   addTag() {
     const raw = (this._newTag || '').trim();
     if (!raw) return;
@@ -164,11 +179,21 @@ export default class ServiceForm extends Mixin(LitElement)
     this._newTag = '';
   }
 
+  /**
+   * @description Remove a tag from the service
+   * @param {String} tag - tag to remove
+   * @returns {void}
+   */
   removeTag(tag) {
     const current = (this.service?.tags ?? []).filter(t => t !== tag);
     this.service = { ...(this.service || {}), tags: current };
   }
 
+  /**
+   * @description Set service to public or not
+   * @param {Boolean} checked - whether to set service to public or not
+   * @returns {void}
+   */
   _setServicePublic(checked) {
     this.service = { ...(this.service || {}), role: checked };
     if (checked) this.service.role = 'public';
@@ -180,6 +205,10 @@ export default class ServiceForm extends Mixin(LitElement)
 
   // Service Properties
 
+  /**
+   * @description Mark service properties as present or not
+   * @returns {void}
+   */
   addPresentOptions() {
     const used = new Set(
       (this.serviceProperties ?? [])
@@ -195,10 +224,18 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
   
-
+  /**
+   * @description Reindex service properties list
+   * @param {Array} list - list of service properties
+   * @returns {Array} - reindexed list
+   */
   _reindex(list) { return list; }
 
 
+  /**
+   * @description Add a new service property
+   * @returns {void}
+   */
   _addItem(){
     const next = [
       ...(this.serviceProperties ?? []),
@@ -207,11 +244,22 @@ export default class ServiceForm extends Mixin(LitElement)
     this.serviceProperties = this._reindex(next);
   };
 
+  /**
+   * @description Remove a service property
+   * @param {String} id - id of service property to remove
+   * @returns {void}
+   */
   _removeItem(id) {
     const next = (this.serviceProperties ?? []).filter(it => it.name !== id);
     this.serviceProperties = this._reindex(next);
   }
 
+  /**
+   * @description Set service property to public or not
+   * @param {String} name - name of service property
+   * @param {Boolean} checked - whether to set service property to public or not
+   * @returns {void}
+   */
   _setServicePropertyPublic(name, checked) {
     this.serviceProperties = (this.serviceProperties ?? []).map(sp => {
       if (sp.name !== name) return sp;
@@ -223,6 +271,12 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
 
+  /**
+   * @description Update boolean service property value
+   * @param {Number} idx - index of service property to update
+   * @param {Boolean} checked - new value
+   * @returns {void}
+   */
   _booleanUpdate(idx, checked) {
     this.serviceProperties = (this.serviceProperties ?? []).map((sp, i) => {
       if (i !== idx) return sp;
@@ -231,6 +285,12 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
 
+  /**
+   * @description Update service property name
+   * @param {Number} idx - index of service property to update
+   * @param {String} newName - new name
+   * @returns {void}
+   */
   _onNameChange(idx, newName) {
     const opt = (this.servicePropertiesOptions ?? []).find(o => o.name === newName);
   
@@ -268,6 +328,11 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
 
+  /**
+   * @description Convert service property value to string for display in text input
+   * @param {Object} item - service property item
+   * @returns {String} - string representation of service property value
+   */
   _valueToString(item) {
     if (!item) return '';
     const t = this._optionTypeFor(item.name);
@@ -278,11 +343,22 @@ export default class ServiceForm extends Mixin(LitElement)
     return String(v0 ?? '');
   }
 
+  /**
+   * @description Get option type for service property name
+   * @param {String} name - name of service property
+   * @returns {String} - type of service property (string, boolean, array, markdown)
+   */
   _optionTypeFor(name) {
     const opt = (this.servicePropertiesOptions ?? []).find(o => o.name === name);
     return opt?.type ?? 'string';
   }
 
+  /**
+   * @description Update service property value from text input
+   * @param {String} id - id of service property to update
+   * @param {String} raw - new value from text input
+   * @returns {void}
+   */
   _onValueInput(id, raw) {
     const next = (this.serviceProperties ?? []).map(sp => {
       if (sp.name !== id) return sp;
@@ -302,7 +378,13 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
 
-
+  /**
+   * @description Update service property array value from text input
+   * @param {Number} idx - index of service property to update
+   * @param {Number} indexInArray - index of value in array to update
+   * @param {String} newVal - new value from text input
+   * @returns {void}
+   */
   _onArrayValueInput(idx, indexInArray, newVal) {
     const next = (this.serviceProperties ?? []).map((sp, i) => {
       if (i !== idx) return sp;
@@ -314,6 +396,11 @@ export default class ServiceForm extends Mixin(LitElement)
     this.requestUpdate();
   }
   
+  /**
+   * @description Add a new value to a service property array
+   * @param {Number} idx - index of service property to update
+   * @returns {void}
+   */
   _addArrayValue(idx) {
     const next = (this.serviceProperties ?? []).map((sp, i) => {
       if (i !== idx) return sp;
@@ -324,6 +411,12 @@ export default class ServiceForm extends Mixin(LitElement)
     this.serviceProperties = next;
   }
   
+  /**
+   * @description Remove a value from a service property array
+   * @param {Number} indexInArray - index of value in array to remove
+   * @param {Number} idx - index of service property to update
+   * @returns {void}
+   */
   _removeArrayValue(idx, indexInArray) {
     const next = (this.serviceProperties ?? []).map((sp, i) => {
       if (i !== idx) return sp;
@@ -336,12 +429,26 @@ export default class ServiceForm extends Mixin(LitElement)
     this.serviceProperties = next;
   }
 
+  /**
+   * @description Handle drag start event
+   * @param {String} id - id of service property to drag
+   * @returns {void}
+   */
   _onDragStart(id) { this._dragId = id; }
 
-
+  /**
+   * @description Handle drag over event
+   * @param {Event} e - drag over event
+   * @returns {void}
+   */
   _onDragOver(e) { e.preventDefault(); }
 
 
+  /**
+   * @description Handle drop event
+   * @param {String} targetId - id of service property to drop on
+   * @returns {void}
+   */
   _onDrop(targetId) {
     if (!this._dragId || this._dragId === targetId) return;
   
@@ -356,14 +463,6 @@ export default class ServiceForm extends Mixin(LitElement)
     this.serviceProperties = this._reindex(next);
     this._dragId = null;
   }
-
-  navigateToForm(){
-    this.page = "form";
-    this.serviceId = null;
-    this.parseData();
-    this.requestUpdate();
-  }
-
 
   //Submit forms and service calls
 
@@ -396,6 +495,8 @@ export default class ServiceForm extends Mixin(LitElement)
       let serviceName = this.service.name.charAt(0).toUpperCase() + this.service.name.slice(1);
       this.confirmationMessage = `${serviceName} service has been updated. Below is the updated service information:`;
       this.page = 'confirmation';
+      this.serviceId = e.payload.body;
+
     }
     else if(e.state == this.ServiceModel.store.STATE.ERROR) {
       this.AppStateModel.showError(e.error.message);
@@ -408,7 +509,7 @@ export default class ServiceForm extends Mixin(LitElement)
    * @description Submit form data to create or update service
   */
   async submitForm(){
-    let missingServiceFields, missingServicePropertyFields;
+    let missingServiceFields;
     
     missingServiceFields = this._checkFields(this.service, ['name', 'title']);
     if ( !missingServiceFields.ok ) {
@@ -469,11 +570,10 @@ export default class ServiceForm extends Mixin(LitElement)
       service_properties: this.serviceProperties
     };
 
-    console.log(formData);
     formData.user = {
-      creator_firstName: 'Sabrina',
-      creator_lastName: 'Baggett',
-      username: 'sbagg'
+      creator_firstName: 'userFirstName',
+      creator_lastName: 'userLastName',
+      username: 'username'
     }
 
 
@@ -485,6 +585,16 @@ export default class ServiceForm extends Mixin(LitElement)
     
     this.requestUpdate();
   }
+
+    /**
+   * @description Navigate to form page
+   * @returns {void}
+   */
+    navigateToForm(){
+      this.parseData();
+      window.location.reload();
+    }
+  
 
 }
 
