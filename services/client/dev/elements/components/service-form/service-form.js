@@ -104,6 +104,10 @@ export default class ServiceForm extends Mixin(LitElement)
    */
   resetInformation(property=null){
     if(!property){
+      if(!this.updateForm) {
+        this.service = {};
+        return;
+      }
       this.service.name = this.originalService.name;
       this.service.tags = this.originalService.tags;
       this.service.title = this.originalService.title;
@@ -111,6 +115,10 @@ export default class ServiceForm extends Mixin(LitElement)
       this.service.role = this.originalService.role ? this.originalService.role: delete this.service.role;
     }
     else {
+      if(!this.updateForm) {
+        this.serviceProperties = [];
+        return;
+      }
       this.serviceProperties = this.originalServiceProperties;
     }
 
